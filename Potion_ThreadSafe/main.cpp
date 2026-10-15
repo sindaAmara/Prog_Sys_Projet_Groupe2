@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    //on va creer une seule marmite
+    // une seule marmite
     Marmite *marmite = new Marmite;
 
-    //creer les personnages et ils reçoivent tous l'adresse de la même marmite
+    //creer les personnages et ils reçoivent tous la même marmite
     QList<Personnage *> personnages;
     personnages.append(new Asterix(0, "Astérix", marmite));
     personnages.append(new Gaulois(1, "Obélix", marmite));
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     for (Personnage *p : personnages)
         p->start();
 
-    //on affiche dans la console chaque message "journal"
+    //message "journal"
     for (Personnage *p : personnages) {
         QObject::connect(p, &Personnage::journal, &app, [](const QString &message) {
             qInfo().noquote() << message;

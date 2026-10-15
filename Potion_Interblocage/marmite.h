@@ -17,13 +17,4 @@ struct Marmite
     std::binary_semaphore marmitePleine{0};   // initialise à 0 Astérix crie "c'est pret !!"
 };
 
-// inline bool attendre(QSemaphore &s)
-// {
-//     while (!s.tryAcquire(1, 100)) {
-//         if (QThread::currentThread()->isInterruptionRequested())
-//             return false;
-//     }
-//     return true;
-// }
-
 #endif // MARMITE_H

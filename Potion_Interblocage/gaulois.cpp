@@ -7,7 +7,6 @@ void Gaulois::run()
         // Faire la queue devant la marmite
         setEtat(AttendMarmite, "Fait la queue devant la marmite");
         m_marmite->mutex.acquire();
-        // if (!attendre(m_marmite->mutex)) break;
 
         // Si la marmite est vide alors réveiller Astérix et attendre
         if (m_marmite->louches == 0) {
@@ -16,7 +15,6 @@ void Gaulois::run()
 
             setEtat(AttendPotion, "Attend qu'Astérix remplisse la marmite");
             m_marmite->marmitePleine.acquire();
-            // if (!attendre(m_marmite->marmitePleine)) break;
 
         }
 
