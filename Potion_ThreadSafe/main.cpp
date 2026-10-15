@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     personnages.append(new Gaulois(2, "Abraracourcix", marmite));
     personnages.append(new Gaulois(3, "Assurancetourix", marmite));
 
-    //lancerr tous les threads
+    //lancer tous les threads
     for (Personnage *p : personnages)
         p->start();
 

@@ -1,8 +1,8 @@
 #ifndef PERSONNAGE_H
 #define PERSONNAGE_H
 
-#include <QThread>
-#include <QString>
+#include <QThread>  // équivalent de la classe Thread mais administré par QT
+#include <QString>  // équivalent de la classe String mais administré par QT
 #include <QRandomGenerator>
 #include "marmite.h"
 

@@ -1,11 +1,7 @@
 #ifndef MARMITE_H
 #define MARMITE_H
 
-// #include <QSemaphore>
-// #include <QThread>
-
 #include<semaphore>
-// #include<thread>
 
 const int M = 5;               // nombre de louches dans une marmite pleine
 const int NB_GAULOIS_MAX = 6;  // nombre maximum de buveurs
@@ -22,14 +18,5 @@ struct Marmite
     std::binary_semaphore marmiteVide{0};     // signal a 0 pour asterix
     std::binary_semaphore marmitePleine{0};   // signal a 0 pour dire que la marmite est prete
 };
-
-// inline bool attendre(QSemaphore &s)
-// {
-//     while (!s.tryAcquire(1, 100)) {
-//         if (QThread::currentThread()->isInterruptionRequested())
-//             return false;
-//     }
-//     return true;
-// }
 
 #endif // MARMITE_H
