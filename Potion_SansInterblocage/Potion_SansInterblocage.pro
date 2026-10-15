@@ -1,6 +1,6 @@
 QT       += core gui widgets
 CONFIG   += c++20
-TARGET    = Potion_ThreadSafe
+TARGET    = Potion_SansInterblocage
 TEMPLATE  = app
 
 msvc: QMAKE_CXXFLAGS += /utf-8
