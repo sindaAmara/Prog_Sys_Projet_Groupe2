@@ -6,12 +6,15 @@ void Asterix::run()
 
         //dormir jusqu'a ce qu'un gaulois sonne
         setEtat(Dort, "Fait la sieste");
-        if (!attendre(m_marmite->marmiteVide)) break;
+
+        m_marmite->marmiteVide.acquire();
+        // if (!attendre(m_marmite->marmiteVide)) break;
 
         //asterix veut le mutex pour remettre le compteur
         emit journal("Astérix se réveille et cueille du gui...");
         setEtat(AttendMarmite, "Attend l'accès à la marmite (mutex)");
-        if (!attendre(m_marmite->mutex)) break;
+        m_marmite->mutex.acquire();
+        // if (!attendre(m_marmite->mutex)) break;
 
         //on atteint jamais cette etape
         setEtat(Prepare, "Prépare la potion magique");
