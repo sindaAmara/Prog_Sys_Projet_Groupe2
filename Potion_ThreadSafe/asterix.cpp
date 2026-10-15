@@ -6,7 +6,8 @@ void Asterix::run()
 
         //dormir jusqu'a ce qu'un gaulois sonne
         setEtat(Dort, "Fait la sieste");
-        if (!attendre(m_marmite->marmiteVide)) break;
+        m_marmite->marmiteVide.acquire();
+        // if (!attendre(m_marmite->marmiteVide)) break;
 
         //preparer la potion
         emit journal("Astérix se réveille et cueille du gui...");

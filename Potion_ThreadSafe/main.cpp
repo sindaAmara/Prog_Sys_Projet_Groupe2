@@ -20,16 +20,16 @@ int main(int argc, char *argv[])
     personnages.append(new Gaulois(2, "Abraracourcix", marmite));
     personnages.append(new Gaulois(3, "Assurancetourix", marmite));
 
+    //lancerr tous les threads
+    for (Personnage *p : personnages)
+        p->start();
+
     //on affiche dans la console chaque message "journal"
     for (Personnage *p : personnages) {
         QObject::connect(p, &Personnage::journal, &app, [](const QString &message) {
             qInfo().noquote() << message;
         });
     }
-
-    //lancerr tous les threads
-    for (Personnage *p : personnages)
-        p->start();
 
     //arreter le programme au bout de 20 secondes
     QTimer::singleShot(20000, &app, &QApplication::quit);
