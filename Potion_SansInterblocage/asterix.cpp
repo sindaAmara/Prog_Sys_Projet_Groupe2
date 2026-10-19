@@ -1,22 +1,10 @@
 #include "asterix.h"
 
-void Asterix::run()
-{
-    while (!isInterruptionRequested()) {
-
-        //dormir jusqu'a ce qu'un gaulois sonne
-        setEtat(Dort, "Fait la sieste");
-        m_marmite->marmiteVide.acquire();
-
-        //preparer la potion
-        emit journal("Astérix se réveille et cueille du gui...");
-        setEtat(Prepare, "Prépare la potion magique");
-        pause(1500, 2500);
-
-        //prevenir que c'est pret
-        emit louchesChangees(M);
-        emit journal(QString("La marmite est pleine ! (%1 louches)").arg(M));
-        m_marmite->marmitePleine.release();
+void Asterix::run() {
+    while (true) {
+        m_marmite->marmiteVide.acquire();   // dort jusqua ce qu on le reveille
+        afficher("Asterix se reveille et cueille du gui...");        pause(1500, 2500);
+        afficher("La marmite est pleine ! (" + std::to_string(M) + " louches)");
+        m_marmite->marmitePleine.release(); // previent le Gaulois que c'est pret
     }
-    setEtat(Termine, "Rentré dans sa hutte");
 }

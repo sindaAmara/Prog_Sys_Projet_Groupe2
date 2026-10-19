@@ -1,49 +1,29 @@
-#include <QApplication>
-#include <QTimer>
-#include <QDebug>
-#include <QList>
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
 #include "marmite.h"
 #include "asterix.h"
 #include "gaulois.h"
 
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
+int main() {
+    srand(time(nullptr));
 
-    // une seule marmite
-    Marmite *marmite = new Marmite;
+    Marmite *marmite = new Marmite;   // une seule marmite et son adresse est partagee par tous
 
-    //creer les personnages et ils reçoivent tous la même marmite
-    QList<Personnage *> personnages;
-    personnages.append(new Asterix(0, "Astérix", marmite));
-    personnages.append(new Gaulois(1, "Obélix", marmite));
-    personnages.append(new Gaulois(2, "Abraracourcix", marmite));
-    personnages.append(new Gaulois(3, "Assurancetourix", marmite));
+    Asterix asterix("Asterix", marmite);
+    Gaulois obelix("Obelix", marmite);
+    Gaulois abraracourcix("Abraracourcix", marmite);
+    Gaulois assurancetourix("Assurancetourix", marmite);
 
-    //lancerr tous les threads
-    for (Personnage *p : personnages)
-        p->start();
+    asterix.start();
+    obelix.start();
+    abraracourcix.start();
+    assurancetourix.start();
 
-    //message "journal"
-    for (Personnage *p : personnages) {
-        QObject::connect(p, &Personnage::journal, &app, [](const QString &message) {
-            qInfo().noquote() << message;
-        });
-    }
+    obelix.join();
+    abraracourcix.join();
+    assurancetourix.join();
 
-    //arreter le programme au bout de 20 secondes
-    QTimer::singleShot(20000, &app, &QApplication::quit);
-    int resultat = app.exec();
-    std::exit(0);
-
-
-    //arreter les threads
-    for (Personnage *p : personnages)
-        p->requestInterruption();
-    for (Personnage *p : personnages) {
-        p->wait();
-        delete p;
-    }
-    delete marmite;
-    return resultat;
+    asterix.detach();   // Asterix dort sur marmiteVide pour toujours cest pour ca qu on ne peut pas faire join()
+    return 0;
 }
