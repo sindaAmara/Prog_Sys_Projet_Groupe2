@@ -3,9 +3,7 @@
 
 #include "personnage.h"
 
-// Asterix remplit la marmite quand on le reveille
-class Asterix : public Personnage
-{
+class Asterix : public Personnage {
 public:
     using Personnage::Personnage;
 protected:

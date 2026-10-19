@@ -1,50 +1,42 @@
 #ifndef PERSONNAGE_H
 #define PERSONNAGE_H
 
-#include <QThread>  // équivalent de la classe Thread mais administré par QT
-#include <QString>  // équivalent de la classe String mais administré par QT
-#include <QRandomGenerator>
+#include <iostream>
+#include <string>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <cstdlib>
 #include "marmite.h"
 
-// Les etats possibles d'un personnage
-enum Etat {
-    AttendMarmite,   // fait la queue
-    AttendPotion,    // attend que la marmite soit pleine
-    Boit,            // boit une louche
-    Combat,          // combat les Romains
-    Dort,            // Asterix attend qu'on le réveille
-    Prepare,         // Asterix prepare la potion
-    Termine          // le thread est arrête
-};
-
-class Personnage : public QThread
-{
-    Q_OBJECT
+// cest la classe de base chaque personnage est un thread
+class Personnage {
 public:
-    Personnage(int id, const QString &nom, Marmite *marmite, QObject *parent = nullptr)
-        : QThread(parent), m_id(id), m_nom(nom), m_marmite(marmite) {}
+    Personnage(const std::string &nom, Marmite *marmite)
+        : m_nom(nom), m_marmite(marmite) {}
 
-    QString nom() const { return m_nom; }
-
-signals:
-    void etatChange(int id, int etat, const QString &texte);
-    void journal(const QString &message);
-    void louchesChangees(int louches);
+    void start() { m_thread = std::thread(&Personnage::run, this); }  // on lance le thread
+    void join()  { m_thread.join(); }                                  // on attend la fin du thread
+    void detach() { m_thread.detach(); }   // on laisse le thread tourner seul
 
 protected:
-    void pause(int minMs, int maxMs)
-    {
-        msleep(QRandomGenerator::global()->bounded(minMs, maxMs));
+    virtual void run() = 0;   // ce que fait le thread (asterix ou gaulois)
+
+    void pause(int minMs, int maxMs) { // c'est pour que ca soit un peu realiste sur le timing
+        int duree = minMs + rand() % (maxMs - minMs);
+        std::this_thread::sleep_for(std::chrono::milliseconds(duree));
     }
 
-    void setEtat(Etat e, const QString &texte)
-    {
-        emit etatChange(m_id, e, texte);
+    void afficher(const std::string &message) {
+        std::lock_guard<std::mutex> verrou(m_marmite->ecran);  // un seul thread ecrit dans la console a la fois
+        std::cout << message << std::endl;
     }
 
-    int m_id;
-    QString m_nom;
-    Marmite *m_marmite;
+    std::string m_nom;
+    Marmite *m_marmite;       // adresse de la marmite partagee
+
+private:
+    std::thread m_thread;
 };
 
 #endif // PERSONNAGE_H
